@@ -48,7 +48,7 @@ class UA {
 		if (empty(self::$regexes)) {
 			if (file_exists(__DIR__."/resources/regexes.yaml")) {
 				self::$regexes = Spyc::YAMLLoad(__DIR__."/resources/regexes.yaml");
-				print "loading yaml...<br />";
+				//print "loading yaml...<br />";
 			} else {
 				print "<h1>Error</h1>
 					   <p>Please download the regexes.yaml file before using UAParser.php.</p>
