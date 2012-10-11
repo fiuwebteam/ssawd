@@ -1,9 +1,0 @@
-The purpose of this library is to make it easier to create adaptive web solutions.
-
-Components:
-
-image.php - It will read a given image and make a local cached version in three different sizes( original, tablet, and mobile). When called, it will return the best sized image for the device.
-
-css.php - It will read the appropriate style sheets in the "css" folder and return them as a single minimized file.
-
-js.php - It will read the appropriate javascript files in the "js" folder and return them as a single minimized file.
