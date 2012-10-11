@@ -9,22 +9,24 @@
  * device viewing the site.
  * 
  */
-//error_reporting(E_ALL);
-//ini_set('display_errors', '1');
 $imageLocation = isset($_GET["img"]) ? $_GET["img"] : null;
 if ($imageLocation == null) { exit(); }
 
-require('./lib/ua-parser/UAParser.php');
-require('./lib/SimpleImage.php');
-
-$type = "desktop";
-$ua = UA::parse();
-
-if ($ua->isTablet) {
-	$type = "tablet";
-} else if($ua->isMobile || $ua->isMobileDevice ) {
-	$type = "mobile";
+if ( isset($_COOKIE["device_type"]) ) {
+	$type = $_COOKIE["device_type"];	
+} else {
+	require('./lib/ua-parser/UAParser.php');
+	$type = "desktop";
+	$ua = UA::parse();	
+	if ($ua->isTablet) {
+		$type = "tablet";
+	} else if($ua->isMobile || $ua->isMobileDevice ) {
+		$type = "mobile";
+	}
+	setcookie("device_type", $type, strtotime('+30 days') );
 }
+
+require('./lib/SimpleImage.php');
 
 $imageName = "./cache/images/" . sha1($imageLocation . $type);
 
