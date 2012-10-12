@@ -17,37 +17,25 @@ require('./lib/config.php');
 require('./lib/functions.php');
 
 $type = deviceType();
-require("./css/shared/external.php");
-//require("./css/$type/external.php");
 
 $cssFolder = "./css/$type/";
 // file name changes if the files in the directory have been changed.
-$cssFile = md5_of_dir($cssFolder);
+$cssFile = md5(md5_of_dir($cssFolder) . md5_of_dir("./css/shared/"));
 $cssLocation = "./cache/css/$cssFile";
-
 if (file_exists($cssLocation)) {
 	header("Content-Type: text/css");
 	readfile($cssLocation);
 	exit();
 } else {
 	mkCacheDir("css");
-	
-	foreach() {
-		
-	}
-	
-	
-	
-	$dirContent = scandir($cssFolder);
-	$ignoreFiles = array(".", "..", "README", "external.php");
-	$output = "";
-	foreach ($dirContent as $value) {
-		if (!in_array($value, $ignoreFiles)) {
-			$output .= file_get_contents($cssFolder.$value);
-		}
-	}
+	flushCache("css");
+	$output = readFolder("./css/shared/");
+	$output .= readFolder($cssFolder);	
+	require('./lib/cssmin.php');
+	$output = CssMin::minify($output);
+	file_put_contents($cssLocation, $output);	
+	header("Content-Type: text/css");
 	echo $output;
-	
+	exit();
 }
-
 ?>

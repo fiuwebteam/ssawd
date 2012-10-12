@@ -41,6 +41,46 @@ function deviceType() {
 	return $type;
 }
 
+function emptyFolder($folder) {
+	$dircontent = scandir($folder);
+	$ignoreFiles = array(".", "..");
+	foreach($dircontent as $value) {
+		if (!in_array($value, $ignoreFiles)) {
+			unlink($folder.$value);
+		}
+	}
+}
+
+function flushCache($cache = null) {
+	switch($cache) {
+		case "css":
+			emptyFolder("./cache/css/");
+			break;
+		case "js":
+			emptyFolder("./cache/js/");
+			break;
+		case "images":
+			emptyFolder("./cache/images/");
+			break;		
+	}
+}
+
+function readFolder($folder) {
+	$ignoreFiles = array(".", "..", "README", "external.php");
+	require($folder."external.php");
+	$output = "";
+	foreach($external as $value) {
+		$output .= file_get_contents($value);
+	}
+	$dirContent = scandir($folder);
+	foreach ($dirContent as $value) {
+		if (!in_array($value, $ignoreFiles)) {
+			$output .= file_get_contents($folder.$value);
+		}
+	}
+	return $output;
+}
+
 function md5_of_dir($folder) {
 	$dircontent = scandir($folder);
 	$ret='';
