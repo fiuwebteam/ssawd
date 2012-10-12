@@ -18,7 +18,7 @@ require('./lib/functions.php');
 
 $type = deviceType();
 require("./css/shared/external.php");
-require("./css/$type/external.php");
+//require("./css/$type/external.php");
 
 $cssFolder = "./css/$type/";
 // file name changes if the files in the directory have been changed.
@@ -31,10 +31,17 @@ if (file_exists($cssLocation)) {
 	exit();
 } else {
 	mkCacheDir("css");
-	$dircontent = scandir($cssFolder);
+	
+	foreach() {
+		
+	}
+	
+	
+	
+	$dirContent = scandir($cssFolder);
 	$ignoreFiles = array(".", "..", "README", "external.php");
 	$output = "";
-	foreach ($dircontent as $value) {
+	foreach ($dirContent as $value) {
 		if (!in_array($value, $ignoreFiles)) {
 			$output .= file_get_contents($cssFolder.$value);
 		}
