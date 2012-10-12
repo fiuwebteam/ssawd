@@ -10,8 +10,11 @@
  * resize and cache local copies of the image.
  * 
  */
+
 require('./lib/config.php');
 require('./lib/functions.php');
+require('./lib/SimpleImage.php');
+
 // Read the passed image, exit if none is given.
 $imageLocation = isset($_GET["img"]) ? $_GET["img"] : null;
 if ($imageLocation == null) { 
@@ -25,20 +28,16 @@ if ($localImagesOnly) {
 		This can be changed in the configuration.");
 	}
 }
-
-// from functions.php
 $type = deviceType();
-
 $imageName = "./cache/images/" . sha1($imageLocation . $type);
-
-require('./lib/SimpleImage.php');
 $image = new SimpleImage();
 
 // Load the local copy is present, else, resize if appropriate, and save a local copy.
 if (file_exists($imageName)) {
 	$image->load($imageName);	
 } else {
-	mkCacheDir("image");
+	// handle cache directory creation if needed
+	mkCacheDir("images");
 	$image->load($imageLocation);
 	$width = 0;
 	switch($type) {

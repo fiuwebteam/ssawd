@@ -10,24 +10,6 @@
  */
 
 /*
- * Make the desired cache folder.
- */
-function mkCacheDir($cache = null) {
-	chkMkFolder("./cache/");	
-	switch($cache) {
-		case "css":
-			chkMkFolder("./cache/css/");
-			break;
-		case "js":
-			chkMkFolder("./cache/js/");
-			break;
-		case "image":
-			chkMkFolder("./cache/images/");
-			break;		
-	}
-}
-
-/*
  * Checks if the required folder exists, if it does not, make one.
  */
 function chkMkFolder($path) {
@@ -57,6 +39,36 @@ function deviceType() {
 		setcookie("device_type", $type, strtotime('+30 days') );
 	}
 	return $type;
+}
+
+function md5_of_dir($folder) {
+	$dircontent = scandir($folder);
+	$ret='';
+	foreach($dircontent as $filename) {
+		if ($filename != '.' && $filename != '..') {
+			if (filemtime($folder.$filename) === false) return false;
+			$ret.=date("YmdHis", filemtime($folder.$filename)).$filename;
+		}
+	}
+	return md5($ret);
+}
+
+/*
+ * Make the desired cache folder.
+ */
+function mkCacheDir($cache = null) {
+	chkMkFolder("./cache/");	
+	switch($cache) {
+		case "css":
+			chkMkFolder("./cache/css/");
+			break;
+		case "js":
+			chkMkFolder("./cache/js/");
+			break;
+		case "images":
+			chkMkFolder("./cache/images/");
+			break;		
+	}
 }
 
 ?>
