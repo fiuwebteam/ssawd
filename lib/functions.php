@@ -38,5 +38,25 @@ function chkMkFolder($path) {
 	}
 }
 
+/*
+ *  Read the device type cookie if available, else, parse the request,
+ *  identify the device, and save the cookie for future use.
+*/
+function deviceType() {
+	if ( isset($_COOKIE["device_type"]) ) {
+		$type = $_COOKIE["device_type"];	
+	} else {
+		require('./ua-parser/UAParser.php');
+		$type = "desktop";
+		$ua = UA::parse();	
+		if ($ua->isTablet) {
+			$type = "tablet";
+		} else if($ua->isMobile || $ua->isMobileDevice ) {
+			$type = "mobile";
+		}
+		setcookie("device_type", $type, strtotime('+30 days') );
+	}
+	return $type;
+}
 
 ?>

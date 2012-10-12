@@ -11,4 +11,7 @@
  * 
  */
 
+require('./lib/config.php');
+require('./lib/functions.php');
+
 ?>
