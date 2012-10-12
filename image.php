@@ -10,12 +10,8 @@
  * resize and cache local copies of the image.
  * 
  */
-// Set the width of the devices (in pixels) here.
-$mobileWidth = 480;
-$tabletWidth = 1024;
-// Specify if the image files should only read on his host or not. The default is local.
-$localImagesOnly = true;
-
+require('./lib/config.php');
+require('./lib/functions.php');
 // Read the passed image, exit if none is given.
 $imageLocation = isset($_GET["img"]) ? $_GET["img"] : null;
 if ($imageLocation == null) { 
@@ -56,11 +52,7 @@ $image = new SimpleImage();
 if (file_exists($imageName)) {
 	$image->load($imageName);	
 } else {
-	if (!file_exists("./cache/images/")) {
-		if (!mkdir("./cache/images/")) {
-			die("Could not create image cache folder.");
-		}
-	}
+	mkCacheDir("image");
 	$image->load($imageLocation);
 	$width = 0;
 	switch($type) {
