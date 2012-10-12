@@ -39,17 +39,18 @@ class SimpleImage {
       }
    }
    function save($filename, $image_type=IMAGETYPE_JPEG, $compression=75, $permissions=null) {
- 
+ 	  $return = false;
       if( $image_type == IMAGETYPE_JPEG ) {
-         imagejpeg($this->image,$filename,$compression);
+         $return = imagejpeg($this->image,$filename,$compression);
       } elseif( $image_type == IMAGETYPE_GIF ) {
-         imagegif($this->image,$filename);
+         $return = imagegif($this->image,$filename);
       } elseif( $image_type == IMAGETYPE_PNG ) {
-         imagepng($this->image,$filename);
+         $return = imagepng($this->image,$filename);
       }
       if( $permissions != null) {
          chmod($filename,$permissions);
       }
+      return $return;
    }
    
    function output($image_type=IMAGETYPE_JPEG) {

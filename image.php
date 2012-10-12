@@ -35,6 +35,11 @@ $image = new SimpleImage();
 if (file_exists($imageName)) {
 	$image->load($imageName);	
 } else {
+	if (!file_exists("./cache/images/")) {
+		if (!mkdir("./cache/images/")) {
+			die("Could not create image cache folder.");
+		}
+	}
 	$image->load($imageLocation);
 	$width = 0;
 	switch($type) {
@@ -48,7 +53,9 @@ if (file_exists($imageName)) {
 	if ($width) { 
 		$image->resizeToWidth($width); 
 	}
-	$image->save($imageName);	
+	if (!$image->save($imageName)) {
+		die("Could not save local cache.");
+	}	
 }
 $contentType = "image/jpeg";
 if( $image->image_type == IMAGETYPE_JPEG ) {
