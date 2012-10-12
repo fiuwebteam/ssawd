@@ -10,7 +10,6 @@
  * resize and cache local copies of the image.
  * 
  */
-
 // Set the width of the devices (in pixels) here.
 $mobileWidth = 480;
 $tabletWidth = 1024;
@@ -53,7 +52,7 @@ $imageName = "./cache/images/" . sha1($imageLocation . $type);
 require('./lib/SimpleImage.php');
 $image = new SimpleImage();
 
-// Load the local copy is present, else, resize if appropriate and save a local copy.
+// Load the local copy is present, else, resize if appropriate, and save a local copy.
 if (file_exists($imageName)) {
 	$image->load($imageName);	
 } else {
@@ -79,6 +78,7 @@ if (file_exists($imageName)) {
 		die("Could not save local cache.");
 	}	
 }
+// Identify the proper file type for the header.
 $contentType = "image/jpeg";
 if( $image->image_type == IMAGETYPE_JPEG ) {
 	$contentType = "image/jpeg";
@@ -88,5 +88,5 @@ if( $image->image_type == IMAGETYPE_JPEG ) {
 	$contentType = "image/png";
 }
 header("Content-Type: $contentType");
-$image->output();
+$image->output($image->image_type);
 ?>
