@@ -9,8 +9,15 @@
  * device viewing the site.
  * 
  */
+
+// Set the width of the devices (in pixels) here.
+$mobileWidth = 480;
+$tabletWidth = 1024;
+
 $imageLocation = isset($_GET["img"]) ? $_GET["img"] : null;
-if ($imageLocation == null) { exit(); }
+if ($imageLocation == null) { 
+	die("You need to specify the location of the image."); 
+}
 
 if ( isset($_COOKIE["device_type"]) ) {
 	$type = $_COOKIE["device_type"];	
@@ -44,10 +51,10 @@ if (file_exists($imageName)) {
 	$width = 0;
 	switch($type) {
 		case "tablet":
-			if ($image->getWidth() > 1024 ) { $width = 1024; }
+			if ($image->getWidth() > $tabletWidth ) { $width = $tabletWidth; }
 		break;
 		case "mobile":
-			if ($image->getWidth() > 480 ) { $width = 480; }
+			if ($image->getWidth() > $mobileWidth ) { $width = $mobileWidth; }
 		break;
 	}
 	if ($width) { 
