@@ -1,6 +1,4 @@
 <?php 
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
 /*
  * SSAWD css.php v 1.0
  * Author: Andre Oliveira
@@ -13,15 +11,13 @@ ini_set('display_errors', '1');
  * 
  */
 
-require('./lib/config.php');
 require('./lib/functions.php');
 
 $type = deviceType();
-
 $cssFolder = "./css/$type/";
-// file name changes if the files in the directory have been changed.
 $cssFile = md5(md5_of_dir($cssFolder) . md5_of_dir("./css/shared/"));
 $cssLocation = "./cache/css/$cssFile";
+
 if (file_exists($cssLocation)) {
 	header("Content-Type: text/css");
 	readfile($cssLocation);

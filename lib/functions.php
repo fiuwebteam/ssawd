@@ -19,7 +19,6 @@ function chkMkFolder($path) {
 		}
 	}
 }
-
 /*
  *  Read the device type cookie if available, else, parse the request,
  *  identify the device, and save the cookie for future use.
