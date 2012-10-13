@@ -11,9 +11,19 @@
  * 
  */
 
-require('./lib/config.php');
 require('./lib/functions.php');
 require('./lib/SimpleImage.php');
+
+/*
+ * Set the width of the devices (in pixels) here.
+*/
+$mobileWidth = 480;
+$tabletWidth = 1024;
+/*
+ * Specify if the image files should only read on his host or not.
+* The default is local only.
+*/
+$localImagesOnly = true;
 
 // Read the passed image, exit if none is given.
 $imageLocation = isset($_GET["img"]) ? $_GET["img"] : null;

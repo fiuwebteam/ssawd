@@ -48,7 +48,9 @@ function deviceType() {
 	}
 	return $type;
 }
-
+/*
+ * Deletes the contents of a specified folder.
+ */
 function emptyFolder($folder) {
 	$dircontent = scandir($folder);
 	$ignoreFiles = array(".", "..");
@@ -58,7 +60,9 @@ function emptyFolder($folder) {
 		}
 	}
 }
-
+/*
+ * Flushes the specified cashe folder.
+ */
 function flushCache($cache = null) {
 	switch($cache) {
 		case "css":
@@ -72,7 +76,9 @@ function flushCache($cache = null) {
 			break;		
 	}
 }
-
+/*
+ * Read the contents of a directory and return all the files in one string.
+ */
 function readFolder($folder) {
 	$ignoreFiles = array(".", "..", "README");
 	$output = "";
@@ -84,7 +90,9 @@ function readFolder($folder) {
 	}
 	return $output;
 }
-
+/*
+ * Make unique identifier for a directory based off of the touch timestamp.
+ */
 function md5_of_dir($folder) {
 	$dircontent = scandir($folder);
 	$ret='';
@@ -96,7 +104,6 @@ function md5_of_dir($folder) {
 	}
 	return md5($ret);
 }
-
 /*
  * Make the desired cache folder.
  */

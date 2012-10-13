@@ -2,10 +2,17 @@ Server Side Adaptive Web Design
 
 The purpose of this library is to make it easier to create adaptive web solutions.
 
+Requirements:
+This script relies on ua-parser, make sure to set up a regular job to update the regexes.yaml
+Also make sure this script will be allowed to create a cache folder. You should get an error if it doesn't
+
 Components:
 
-image.php - It will read a given image and make a local cached version in three different sizes( original, tablet, and mobile). When called, it will return the best sized image for the device.
+image.php - It will read a given image and make a local cached version in three different sizes( original, tablet, and mobile). 
+When called, it will return the best sized image for the device.
 
 css.php - It will read the appropriate style sheets in the "css" folder and return them as a single minimized file.
+The "shared" folder will be pulled by all calls.
 
 js.php - It will read the appropriate javascript files in the "js" folder and return them as a single minimized file.
+The "shared" folder will be pulled by all calls.
