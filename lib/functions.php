@@ -25,7 +25,16 @@ function chkMkFolder($path) {
 */
 function deviceType() {
 	if ( isset($_COOKIE["device_type"]) ) {
-		$type = $_COOKIE["device_type"];	
+		switch($_COOKIE["device_type"]) {
+			case "desktop":
+			case "tablet":
+			case "mobile":
+				$type = $_COOKIE["device_type"];
+				break;
+			default:
+				die("Invalid cookie parameter.");
+		}
+			
 	} else {
 		require('./ua-parser/UAParser.php');
 		$type = "desktop";
@@ -65,12 +74,8 @@ function flushCache($cache = null) {
 }
 
 function readFolder($folder) {
-	$ignoreFiles = array(".", "..", "README", "external.php");
-	require($folder."external.php");
+	$ignoreFiles = array(".", "..", "README");
 	$output = "";
-	foreach($external as $value) {
-		$output .= file_get_contents($value);
-	}
 	$dirContent = scandir($folder);
 	foreach ($dirContent as $value) {
 		if (!in_array($value, $ignoreFiles)) {

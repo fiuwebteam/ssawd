@@ -19,7 +19,6 @@ $jsFile = md5(md5_of_dir($jsFolder) . md5_of_dir("./js/shared/"));
 $jsLocation = "./cache/js/$jsFile";
 
 if (file_exists($jsLocation)) {
-	header('Content-Encoding: UTF-8');
 	header("Content-Type: text/javascript");
 	readfile($jsLocation);
 	exit();
@@ -32,7 +31,6 @@ if (file_exists($jsLocation)) {
 	$output = JSMin::minify($output);
 	$output = utf8_encode($output);
 	file_put_contents($jsLocation, $output);
-	header('Content-Encoding: UTF-8');
 	header("Content-Type: text/javascript");
 	echo $output;
 	exit();
