@@ -92,13 +92,18 @@ function deviceType() {
 	return $type;
 }
 /*
- * Deletes the contents of a specified folder.
+ * Deletes the contents of a specified folder older than a specified time.
+ * Default is 30 days.
  */
-function emptyFolder($folder) {
+function emptyFolder($folder, $time) {
 	$dircontent = scandir($folder);
 	$ignoreFiles = array(".", "..");
+	$today = time();
 	foreach($dircontent as $value) {
-		if (!in_array($value, $ignoreFiles)) {
+		if (
+			!in_array($value, $ignoreFiles) &&
+			(($today - $time) >= filemtime($folder.$value))
+		) {
 			unlink($folder.$value);
 		}
 	}
@@ -106,16 +111,16 @@ function emptyFolder($folder) {
 /*
  * Flushes the specified cashe folder.
  */
-function flushCache($cache = null) {
+function flushCache($cache = null, $time = 2592000) {
 	switch($cache) {
 		case "css":
-			emptyFolder("./cache/css/");
+			emptyFolder("./cache/css/", $time);
 			break;
 		case "js":
-			emptyFolder("./cache/js/");
+			emptyFolder("./cache/js/", $time);
 			break;
 		case "images":
-			emptyFolder("./cache/images/");
+			emptyFolder("./cache/images/", $time);
 			break;		
 	}
 }

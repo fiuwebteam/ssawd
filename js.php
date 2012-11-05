@@ -12,6 +12,23 @@
  */
 
 require('./lib/functions.php');
+/* 
+ * Cascade will read the folder up to the current device type
+ * Ex: If the device is tablet and cascade is on, it will read the mobile 
+ * folder and append it to the output before reading the tablet folder
+ * and appending that.   
+ */
+$cascade = isset($_GET["cascade"]) ? true : false;
+/*
+ * If we want the output to be the same for a tablet as a desktop 
+ * we mark this flag on and we only have to add files to the desktop.
+ */
+$tabletIsDesktop = isset($_GET["tabletIsDesktop"]) ? true : false;
+/*
+ * If we want the output to be the same for a mobile as a tablet 
+ * we mark this flag on and we only have to add files to the tablet.
+ */
+$mobileIsTablet = isset($_GET["mobileIsTablet"]) ? true : false;
 
 $type = deviceType();
 $jsFolder = "./js/$type/";
@@ -24,6 +41,7 @@ if (file_exists($jsLocation)) {
 	exit();
 } else {
 	mkCacheDir("js");
+	flushCache("js");
 	$output = readFolder("./js/shared/");
 	$output .= readFolder($jsFolder);	
 	require('./lib/jsmin.php');

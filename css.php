@@ -14,7 +14,6 @@
 require('./lib/functions.php');
 
 $type = deviceType();
-// Variables to change the appending process
 /* 
  * Cascade will read the folder up to the current device type
  * Ex: If the device is tablet and cascade is on, it will read the mobile 
@@ -48,6 +47,7 @@ if (file_exists($cssLocation) && false) {
 	exit();
 } else {
 	mkCacheDir("css");
+	flushCache("css");
 	if ($cascade) {
 		$output = cascadeHandler($type, "css", $tabletIsDesktop, $mobileIsTablet);		
 	} else {
