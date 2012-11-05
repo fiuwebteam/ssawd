@@ -14,11 +14,17 @@ When called, it will return the best sized image for the device.
 css.php - It will read the appropriate style sheets in the "css" folder and return them as a single minimized file.
 The "shared" folder will be pulled by all calls.
 	Optional Parameters:
+	- cascade: The default function of simply pulling the right files for the device is
+	replaced with pulling all the files before the device hierarchy. 
+	Desktop > Tablet > Mobile
 	- tabletIsDesktop: The tablet files are ignored and replaced by the desktop files
 	- mobileIsTablet: The mobiles files are ignored and replaced by the tablet files
 
 js.php - It will read the appropriate javascript files in the "js" folder and return them as a single minimized file.
 The "shared" folder will be pulled by all calls.
 	Optional Parameters:
+	- cascade: The default function of simply pulling the right files for the device is
+	replaced with pulling all the files before the device hierarchy. 
+	Desktop > Tablet > Mobile
 	- tabletIsDesktop: The tablet files are ignored and replaced by the desktop files
 	- mobileIsTablet: The mobiles files are ignored and replaced by the tablet files
