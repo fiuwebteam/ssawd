@@ -43,11 +43,11 @@ function cascadeHandler($device, $type, $tabletIsDesktop, $mobileIsTablet) {
 			$output = readFolder("./$type/desktop/") . $output;
 		case "tablet":
 			if (!$tabletIsDesktop) { $output = readFolder("./$type/tablet/") . $output; }
-			else { $output = readFolder("./$type/desktop/") . $output; }
+			else if ($device == "tablet") { $output = readFolder("./$type/desktop/") . $output; }
 		case "mobile":
 			if (!$mobileIsTablet) { $output = readFolder("./$type/mobile/") . $output; }
-			else if (!$tabletIsDesktop) { $output = readFolder("./$type/tablet/") . $output; } 
-			else { $output = readFolder("./$type/desktop/") . $output; }
+			else if (!$tabletIsDesktop && $device == "mobile" ) { $output = readFolder("./$type/tablet/") . $output; } 
+			else if ($device == "mobile") { $output = readFolder("./$type/desktop/") . $output; }
 	}
 	return $output;
 }
@@ -93,7 +93,6 @@ function deviceType() {
 }
 /*
  * Deletes the contents of a specified folder older than a specified time.
- * Default is 30 days.
  */
 function emptyFolder($folder, $time) {
 	$dircontent = scandir($folder);
@@ -109,7 +108,8 @@ function emptyFolder($folder, $time) {
 	}
 }
 /*
- * Flushes the specified cashe folder.
+ * Flushes the specified cashe folder older than a specified time.
+ * Default is 30 days.
  */
 function flushCache($cache = null, $time = 2592000) {
 	switch($cache) {

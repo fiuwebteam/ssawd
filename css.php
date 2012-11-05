@@ -41,7 +41,7 @@ $cssFile = md5(
 );
 $cssLocation = "./cache/css/$cssFile";
 
-if (file_exists($cssLocation) && false) {
+if (file_exists($cssLocation)) {
 	header("Content-Type: text/css");
 	readfile($cssLocation);
 	exit();

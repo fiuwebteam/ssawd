@@ -12,6 +12,8 @@
  */
 
 require('./lib/functions.php');
+
+$type = deviceType();
 /* 
  * Cascade will read the folder up to the current device type
  * Ex: If the device is tablet and cascade is on, it will read the mobile 
@@ -30,20 +32,28 @@ $tabletIsDesktop = isset($_GET["tabletIsDesktop"]) ? true : false;
  */
 $mobileIsTablet = isset($_GET["mobileIsTablet"]) ? true : false;
 
-$type = deviceType();
 $jsFolder = "./js/$type/";
-$jsFile = md5(md5_of_dir($jsFolder) . md5_of_dir("./js/shared/"));
+$jsFile = md5(
+	md5_of_dir($jsFolder) . 
+	md5_of_dir("./js/shared/") . 
+	$cascade . $tabletIsDesktop . 
+	$mobileIsTablet
+);
 $jsLocation = "./cache/js/$jsFile";
 
-if (file_exists($jsLocation)) {
+if (file_exists($jsLocation) && false) {
 	header("Content-Type: text/javascript");
 	readfile($jsLocation);
 	exit();
 } else {
 	mkCacheDir("js");
 	flushCache("js");
-	$output = readFolder("./js/shared/");
-	$output .= readFolder($jsFolder);	
+	if ($cascade) {
+		$output = cascadeHandler($type, "js", $tabletIsDesktop, $mobileIsTablet);		
+	} else {
+		$output = breakHandler($type, "js", $tabletIsDesktop, $mobileIsTablet);
+	}
+	$output = readFolder("./js/shared/") . $output;
 	require('./lib/jsmin.php');
 	$output = JSMin::minify($output);
 	$output = utf8_encode($output);
