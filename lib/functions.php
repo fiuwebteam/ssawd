@@ -10,6 +10,49 @@
  */
 
 /*
+ * Handles normal file generation
+ */
+
+function breakHandler($device, $folder, $tabletIsDesktop, $mobileIsTablet) {
+	$output = "";
+	switch ($device) {
+		case "mobile":
+			if (!$mobileIsTablet) {
+				$output .= readFolder("./$folder/mobile/");
+				break;
+			}
+		case "tablet":
+			if (!$tabletIsDesktop) { 
+				$output .= readFolder("./$folder/tablet/");
+				break;
+			}
+		case "desktop":
+			$output .= readFolder("./$folder/desktop/");
+			break;
+	}
+	return $output;
+}
+
+/*
+ * Handles file generation if the script is set to cascade
+ */
+function cascadeHandler($device, $type, $tabletIsDesktop, $mobileIsTablet) {
+	$output = "";
+	switch ($device) {
+		case "desktop":
+			$output = readFolder("./$type/desktop/") . $output;
+		case "tablet":
+			if (!$tabletIsDesktop) { $output = readFolder("./$type/tablet/") . $output; }
+			else { $output = readFolder("./$type/desktop/") . $output; }
+		case "mobile":
+			if (!$mobileIsTablet) { $output = readFolder("./$type/mobile/") . $output; }
+			else if (!$tabletIsDesktop) { $output = readFolder("./$type/tablet/") . $output; } 
+			else { $output = readFolder("./$type/desktop/") . $output; }
+	}
+	return $output;
+}
+
+/*
  * Checks if the required folder exists, if it does not, make one.
  */
 function chkMkFolder($path) {
@@ -36,7 +79,7 @@ function deviceType() {
 		}
 			
 	} else {
-		require('./ua-parser/UAParser.php');
+		require('./lib/ua-parser/UAParser.php');
 		$type = "desktop";
 		$ua = UA::parse();	
 		if ($ua->isTablet) {

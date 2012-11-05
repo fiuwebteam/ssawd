@@ -24,7 +24,6 @@ if (file_exists($jsLocation)) {
 	exit();
 } else {
 	mkCacheDir("js");
-	flushCache("js");
 	$output = readFolder("./js/shared/");
 	$output .= readFolder($jsFolder);	
 	require('./lib/jsmin.php');
