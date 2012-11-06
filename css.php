@@ -26,7 +26,7 @@ $cssFolders = getFolders($device, "css");
 $cssFile = makeFileName($cssFolders, $cascade);
 $cssLocation = "./cache/css/$cssFile";
 
-if (file_exists($cssLocation) && false) {
+if (file_exists($cssLocation)) {
 	header("Content-Type: text/css");
 	readfile($cssLocation);
 	exit();
