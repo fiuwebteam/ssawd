@@ -10,44 +10,39 @@
  */
 
 /*
- * Handles normal file generation
- */
-
-function breakHandler($device, $folder, $tabletIsDesktop, $mobileIsTablet) {
-	$output = "";
-	switch ($device) {
-		case "mobile":
-			if (!$mobileIsTablet) {
-				$output .= readFolder("./$folder/mobile/");
-				break;
-			}
-		case "tablet":
-			if (!$tabletIsDesktop) { 
-				$output .= readFolder("./$folder/tablet/");
-				break;
-			}
-		case "desktop":
-			$output .= readFolder("./$folder/desktop/");
-			break;
-	}
-	return $output;
-}
-
-/*
  * Handles file generation if the script is set to cascade
  */
-function cascadeHandler($device, $type, $tabletIsDesktop, $mobileIsTablet) {
+function cascadeHandler($device, $type) {
+	$readFolders = array();
 	$output = "";
 	switch ($device) {
 		case "desktop":
 			$output = readFolder("./$type/desktop/") . $output;
+			$output = readFolder("./$type/desktop_tablet/") . $output;
+			$output = readFolder("./$type/desktop_mobile/") . $output;
+			$readFolders[] = "./$type/desktop/";
+			$readFolders[] = "./$type/desktop_tablet/";
+			$readFolders[] = "./$type/desktop_mobile/";
 		case "tablet":
-			if (!$tabletIsDesktop) { $output = readFolder("./$type/tablet/") . $output; }
-			else if ($device == "tablet") { $output = readFolder("./$type/desktop/") . $output; }
+			$output = readFolder("./$type/tablet/"). $output;
+			if (!in_array("./$type/desktop_tablet/", $readFolders)) {
+				$output = readFolder("./$type/desktop_tablet/"). $output;
+				$readFolders[] = "./$type/desktop_tablet/";
+			}
+			$output = readFolder("./$type/mobile_tablet/"). $output;
+			$readFolders[] = "./$type/mobile_tablet/";
 		case "mobile":
-			if (!$mobileIsTablet) { $output = readFolder("./$type/mobile/") . $output; }
-			else if (!$tabletIsDesktop && $device == "mobile" ) { $output = readFolder("./$type/tablet/") . $output; } 
-			else if ($device == "mobile") { $output = readFolder("./$type/desktop/") . $output; }
+			if (!in_array("./$type/desktop_mobile/", $readFolders)) {
+				$output = readFolder("./$type/desktop_mobile/"). $output;
+				$readFolders[] = "./$type/desktop_mobile/";
+			}
+			if (!in_array("./$type/mobile_tablet/", $readFolders)) {
+				$output = readFolder("./$type/mobile_tablet/"). $output;
+				$readFolders[] = "./$type/mobile_tablet/";
+			}
+			$output = readFolder("./$type/mobile/"). $output;
+		default:
+			$output = readFolder("./$type/shared/"). $output;			
 	}
 	return $output;
 }
@@ -124,6 +119,16 @@ function flushCache($cache = null, $time = 2592000) {
 			break;		
 	}
 }
+function getFolders($device, $type) {
+	$output = array("./$type/shared/");
+	foreach (scandir("./$type/") as $value) {
+		if (strpos($value, $device) !== false) {
+		    $output[] = "./$type/$value/";
+		}
+	}
+	return $output;
+}
+
 /*
  * Read the contents of a directory and return all the files in one string.
  */
@@ -138,6 +143,16 @@ function readFolder($folder) {
 	}
 	return $output;
 }
+
+function makeFileName($folders, $cascade) {
+	$fileName = $cascade;
+	foreach($folders as $value) {
+		$fileName .= md5_of_dir($value);
+	}
+	$fileName = md5( $fileName );
+	return $fileName;
+}
+
 /*
  * Make unique identifier for a directory based off of the touch timestamp.
  */

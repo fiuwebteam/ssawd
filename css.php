@@ -13,7 +13,7 @@
 
 require('./lib/functions.php');
 
-$type = deviceType();
+$device = deviceType();
 /* 
  * Cascade will read the folder up to the current device type
  * Ex: If the device is tablet and cascade is on, it will read the mobile 
@@ -21,27 +21,12 @@ $type = deviceType();
  * and appending that.   
  */
 $cascade = isset($_GET["cascade"]) ? true : false;
-/*
- * If we want the output to be the same for a tablet as a desktop 
- * we mark this flag on and we only have to add files to the desktop.
- */
-$tabletIsDesktop = isset($_GET["tabletIsDesktop"]) ? true : false;
-/*
- * If we want the output to be the same for a mobile as a tablet 
- * we mark this flag on and we only have to add files to the tablet.
- */
-$mobileIsTablet = isset($_GET["mobileIsTablet"]) ? true : false;
 
-$cssFolder = "./css/$type/";
-$cssFile = md5(
-	md5_of_dir($cssFolder) . 
-	md5_of_dir("./css/shared/") . 
-	$cascade . $tabletIsDesktop . 
-	$mobileIsTablet
-);
+$cssFolders = getFolders($device, "css");
+$cssFile = makeFileName($cssFolders, $cascade);
 $cssLocation = "./cache/css/$cssFile";
 
-if (file_exists($cssLocation)) {
+if (file_exists($cssLocation) && false) {
 	header("Content-Type: text/css");
 	readfile($cssLocation);
 	exit();
@@ -49,11 +34,13 @@ if (file_exists($cssLocation)) {
 	mkCacheDir("css");
 	flushCache("css");
 	if ($cascade) {
-		$output = cascadeHandler($type, "css", $tabletIsDesktop, $mobileIsTablet);		
+		$output = cascadeHandler($device, "css");		
 	} else {
-		$output = breakHandler($type, "css", $tabletIsDesktop, $mobileIsTablet);
-	}
-	$output = readFolder("./css/shared/") . $output;		
+		$output = "";
+		foreach($cssFolders as $value) {
+			$output .= readFolder($value);
+		}
+	}			
 	require('./lib/cssmin.php');
 	$output = CssMin::minify($output);
 	file_put_contents($cssLocation, $output);	
